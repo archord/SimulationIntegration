@@ -1,0 +1,37 @@
+#- need modify if instrument changed. following params need to be midfied:
+#-  convert_paras 
+
+#-catalog:
+ra                 233.738  
+dec                23.5032 
+convert_paras      1.251--4.197,1.186--4.177     #ncp33: [1.251,4.197]  npp33: [1.186,4.177]  
+                                                 #ncp62: [ 175.68452831,  223.12848653,  112.70106014,31.20778233,-1.03300746]   
+                                                 #npp62: [-1.19863679, -0.87790704, -1.03689397]
+dithering          2                             # default dithering=1, i.e. no dithering,  
+galaxy_shapetemp   np_gal33.list                 #  galaxy shape--- other channel: np_gal62.list, from stuff..
+outfilprefix       TestNiceSimu                  #- output file and temporary file prefix name.
+
+#--skymak parameters
+m1_diameter        0.3                                  #  Diameter of the primary mirror (in meters)
+channels           2                                    #  how many channels used.
+skyconf            sky_ncton.conf,sky_npah.conf         #  skymaker default config files, no space for values.
+psf_name           skypsf_fwhm20.psf,skypsf_fwhm20.psf  #  Name of the FITS image containing the PSF   
+psf_oversamp       10,10                                #  Oversampling factor / final resolution     
+psf_mapsize        503,503                              #  PSF mask size (pixels): must be a power of 2   
+image_size         1024,1024                            #  Width,height of the output frame, assumed two channels same
+gain               1.0,1.0                              #  gain (e-/ADU)
+readout_noise      30,30                                #  read-out noise (e-)
+exposure_time      10,10                                #  total exposure time(s)
+pixel_size         3.5                                  #  pixel size in arcsec. two channel same.
+trackerror_type    None                                 #  Tracking error model: NONE, DRIFT or JITTER 
+trackerror_maj     0.0                                  #  Tracking RMS error (major axis) (in arcsec)
+trackerror_min     0.0                                  #  Tracking RMS error (minor axis) (in arcsec)
+trackerror_ang     0.0                                  #  Tracking angle (in deg, CC/horizontal)
+
+
+#-- from other script calculation
+#- skymk :
+#=========
+mag_zeropoint   
+WAVELENGTH        0.8                                   #  average wavelength analysed (microns)
+

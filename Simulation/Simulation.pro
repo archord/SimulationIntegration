@@ -17,13 +17,16 @@ SOURCES += main.cpp\
     psfdialog.cpp \
     detectordialog.cpp \
     stinyconfigfile.cpp \
-    skyconfigfile.cpp
+    skyconfigfile.cpp \
+    inputdefaultfile.cpp
 
 HEADERS  += dialog.h \
     psfdialog.h \
     detectordialog.h \
     stinyconfigfile.h \
-    skyconfigfile.h
+    skyconfigfile.h \
+    inputdefaultfile.h \
+    parmdefine.h
 
 FORMS    += \
     psfDialog.ui \
