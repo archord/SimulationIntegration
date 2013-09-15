@@ -42,8 +42,7 @@
 #define DIALOG_H
 
 #include <QDialog>
-#include "stinyconfigfile.h"
-#include "skyconfigfile.h"
+#include "inputdefaultfile.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -60,6 +59,7 @@ class QFileDialog;
 class QRadioButton;
 class QComboBox;
 class QCheckBox;
+class QToolBox;
 QT_END_NAMESPACE
 
 //! [0]
@@ -71,8 +71,8 @@ public:
     Dialog();
 
 private:
-    void initParameter();
     void createMenu();
+    void createWorkSpaceBox();
     void createGridGroupBox1();
     void createGridGroupBox2();
     void createGridGroupBox3();
@@ -80,11 +80,18 @@ private:
     void createGridGroupBox5();
     void createGridGroupBox6();
     void createGridGroupBox7();
+    void createGridGroupBox8();
+    void createGridGroupBox9();
     void createButtonBox();
-    void createWorkDirectory(QString path);
+
+    void initParameter();
+    void readSimulationConfigFile();
+    void writeSimulationConfigFile();
+    void readInputDefaultFile();
+    void createWorkDirectory();
     void readConfigFile();
     void showDefaultParameter();
-    void saveParameter();
+    void saveInputDefaultFile();
 
     bool loadObjectParameterFileNames();
     bool hasSameFileName(QString tmpFileName);
@@ -97,27 +104,19 @@ private:
            ButtonMaximumHeight = 27
          };
 
-    QString ObjectParameterFile;
 
     QTextCodec *codec;
     QString tmpString;
-    StinyConfigFile *stinyConf;
-    SkyConfigFile * skyConf;
+    QString ObjectParameterFile;
+    QString inputDefaultFile;
+    QString defaultWorkspace;
+    QString simulationConfigDir;
 
     QString simulationDirectory;
     QString runDirectory;
-    QString psfDirectory;
-    QString stuffDirectory;
-    QString skyDirectory;
+    QString configDirectory;
 
-    QString curDirectory;
-    QString confDirectory;
-    QString tempDirectory;
-    QString outputDirectory;
-
-    char curStinyConf[MAX_STRING];
-    char curSkyConf[MAX_STRING];
-
+    InputDefaultFile *inputfile;
     //菜单
     QMenuBar *menuBar;
     QMenu *fileMenu;
@@ -136,8 +135,16 @@ private:
 
     QDialogButtonBox *buttonBox;
 
+    QToolBox *toolbox;
+
+    //工作路径
+    QGroupBox *groupBox0;
+    QLabel *label01;
+    QLineEdit *lineEdit01;
+    QPushButton *button01;
+    QLabel *label02;
+
     //观测策略
-    QGroupBox *gridGroupBox1;
     QLabel *label11;
     QLineEdit *lineEdit11;
     QLabel *symble11;
@@ -154,80 +161,143 @@ private:
     QLineEdit *lineEdit14;
     QLabel *symble14;
 
+    QLabel *label15;
+    QLineEdit *lineEdit15;
+    QLabel *symble15;
+
+    QLabel *label16;
+    QLineEdit *lineEdit16;
+    QLabel *symble16;
+
+    QLabel *label17;
+    QLineEdit *lineEdit17;
+    QLabel *symble17;
+
     //光学系统特征
-    QGroupBox *gridGroupBox2;
     QLabel *label21;
     QLabel *label22;
     QLabel *label23;
     QLabel *label24;
+
     QLabel *label25;
+    QLineEdit *lineEdit25;
+
     QLabel *label26;
     QLabel *label27;
-    QLineEdit *lineEdit21;
-    QLineEdit *lineEdit22;
-    QLineEdit *lineEdit23;
-    QLineEdit *lineEdit24;
-    QLineEdit *lineEdit25;
-    QPushButton *button21;
-    QPushButton *button22;
-    QPushButton *button23;
-    QPushButton *button24;
+    QLabel *label28;
+    QLabel *label29;
+    QLabel *label210;
+    QLabel *label211;
+    QLabel *label212;
+    QLabel *label213;
+    QLabel *label214;
+    QLabel *label215;
+    QLabel *label216;
+    QLabel *label217;
+    QLabel *label218;
+    QLabel *label219;
+    QLabel *label220;
+    QLabel *label221;
+    QLineEdit *lineEdit26;
+    QLineEdit *lineEdit27;
+    QLineEdit *lineEdit28;
+    QLineEdit *lineEdit29;
+    QLineEdit *lineEdit210;
+    QLineEdit *lineEdit211;
+    QLineEdit *lineEdit212;
+    QLineEdit *lineEdit213;
+    QLineEdit *lineEdit214;
+    QLineEdit *lineEdit215;
+    QLineEdit *lineEdit216;
+    QLineEdit *lineEdit217;
+    QLineEdit *lineEdit218;
+    QLineEdit *lineEdit219;
+    QLineEdit *lineEdit220;
+    QLineEdit *lineEdit221;
+    QPushButton *button26;
+    QPushButton *button27;
+    QPushButton *button210;
+    QPushButton *button211;
+    QPushButton *button214;
+    QPushButton *button215;
+    QPushButton *button218;
+    QPushButton *button219;
 
     //探测器参数
-    QGroupBox *gridGroupBox3;
     QLabel *label31;
     QLabel *label32;
     QLabel *label33;
     QLabel *label34;
+
     QLabel *label35;
-    QLabel *label36;
-    QLabel *label37;
-    QLabel *label38;
-    QLabel *label39;
-    QLabel *label310;
-    QLabel *label311;
-    QLabel *label312;
-    QLabel *label313;
-    QLabel *label314;
-    QLineEdit *lineEdit32;
-    QLineEdit *lineEdit33;
-    QLineEdit *lineEdit34;
     QLineEdit *lineEdit35;
+    QLabel *label36;
     QLineEdit *lineEdit36;
+
+    QLabel *label37;
     QLineEdit *lineEdit37;
+    QLabel *label38;
+    QLineEdit *lineEdit38;
+    QLabel *label39;
     QLineEdit *lineEdit39;
+    QLabel *label310;
     QLineEdit *lineEdit310;
+
+    QLabel *label311;
     QLineEdit *lineEdit311;
+    QLabel *label312;
     QLineEdit *lineEdit312;
+    QLabel *label313;
     QLineEdit *lineEdit313;
+    QLabel *label314;
     QLineEdit *lineEdit314;
-    QPushButton *button32;
-    QPushButton *button33;
-    QPushButton *button34;
-    QPushButton *button35;
-    QPushButton *button36;
-    QPushButton *button37;
+
+    QLabel *label315;
+    QLineEdit *lineEdit315;
+    QLabel *label316;
+    QLineEdit *lineEdit316;
+    QLabel *label317;
+    QLineEdit *lineEdit317;
+    QLabel *label318;
+    QLineEdit *lineEdit318;
+
+    QLabel *label319;
+    QLineEdit *lineEdit319;
+    QLabel *label320;
+    QLineEdit *lineEdit320;
+    QLabel *label321;
+    QLineEdit *lineEdit321;
+    QLabel *label322;
+    QLineEdit *lineEdit322;
+
     QPushButton *button39;
-    QPushButton *button310;
-    QPushButton *button311;
-    QPushButton *button312;
     QPushButton *button313;
-    QPushButton *button314;
+    QPushButton *button317;
+    QPushButton *button321;
 
     //平台稳定性参数
-    QGroupBox *gridGroupBox4;
-    QLabel *label41;
-    QLineEdit *lineEdit41;
-    QLabel *symble41;
+    QCheckBox *checkBox41;
+
+    QLabel *label42;
+    QLineEdit *lineEdit42;
+    QLabel *symble42;
+    QLabel *label43;
+    QLineEdit *lineEdit43;
+    QLabel *symble43;
+    QLabel *label44;
+    QLineEdit *lineEdit44;
+    QLabel *symble44;
 
     //天光背景模型
-    QGroupBox *gridGroupBox5;
-    QCheckBox *checkBox51;
-    QCheckBox *checkBox52;
-    QCheckBox *checkBox53;
+    QLabel *label51;
+    QLineEdit *lineEdit51;
+    QPushButton *button51;
+    QLabel *space51;
+
+    QLabel *label52;
+    QLineEdit *lineEdit52;
 
     //目标天体参数
-    QGroupBox *gridGroupBox6;
     QLabel *label61;
     QComboBox *comboBox61;
     QLabel *label62;
@@ -243,12 +313,75 @@ private:
     QComboBox *comboBox66;
     QLabel *label67;
     QLineEdit *lineEdit67;
+    QLabel *label68;
+    QLineEdit *lineEdit68;
+    QLabel *label69;
+    QLineEdit *lineEdit69;
 
     //输出类型选择
-    QGroupBox *gridGroupBox7;
     QLabel *label71;
     QLabel *label72;
     QComboBox *comboBox71;  //QComboBox
+
+    //噪声背景
+    QLabel *label81;
+    QCheckBox *checkBox81;
+    QLineEdit *lineEdit81;
+    QLabel *label82;
+    QLineEdit *lineEdit82;
+    QPushButton *button82;
+    QLabel *label83;
+    QLineEdit *lineEdit83;
+    QPushButton *button83;
+    QLabel *label84;
+    QLineEdit *lineEdit84;
+    QPushButton *button84;
+    QLabel *label85;
+    QLineEdit *lineEdit85;
+    QPushButton *button85;
+    QLabel *label86;
+    QLineEdit *lineEdit86;
+    QPushButton *button86;
+    QLabel *label87;
+    QLineEdit *lineEdit87;
+    QPushButton *button87;
+    QLabel *label88;
+    QLineEdit *lineEdit88;
+    QPushButton *button88;
+    QLabel *label89;
+    QLineEdit *lineEdit89;
+    QPushButton *button89;
+    QLabel *label810;
+    QLineEdit *lineEdit810;
+    QPushButton *button810;
+    QLabel *label811;
+    QLineEdit *lineEdit811;
+    QPushButton *button811;
+    QLabel *label812;
+    QLineEdit *lineEdit812;
+    QPushButton *button812;
+    QLabel *label813;
+    QLineEdit *lineEdit813;
+    QPushButton *button813;
+
+
+    //探测效率参数
+    QLabel *label91;
+    QLineEdit *lineEdit91;
+    QLabel *label92;
+    QLineEdit *lineEdit92;
+    QLabel *label93;
+    QLineEdit *lineEdit93;
+    QLabel *label94;
+    QLineEdit *lineEdit94;
+    QLabel *label95;
+    QLineEdit *lineEdit95;
+    QLabel *label96;
+    QLineEdit *lineEdit96;
+    QLabel *label97;
+    QLineEdit *lineEdit97;
+    QLabel *label98;
+    QLineEdit *lineEdit98;
 
     //执行按钮
     QPushButton *generateConfig;
@@ -257,23 +390,38 @@ private:
     QList<QString> fileNameList;
 
 private slots:
-    void slotOpenFile21();
-    void slotOpenFile22();
-    void slotOpenFile23();
-    void slotOpenFile24();
+    void slotOpenFile01();
+    void slotOpenFile26();
+    void slotOpenFile27();
+    void slotOpenFile210();
+    void slotOpenFile211();
+    void slotOpenFile214();
+    void slotOpenFile215();
+    void slotOpenFile218();
+    void slotOpenFile219();
 
-    void slotOpenFile32();
-    void slotOpenFile33();
-    void slotOpenFile34();
-    void slotOpenFile35();
-    void slotOpenFile36();
-    void slotOpenFile37();
     void slotOpenFile39();
-    void slotOpenFile310();
-    void slotOpenFile311();
-    void slotOpenFile312();
     void slotOpenFile313();
-    void slotOpenFile314();
+    void slotOpenFile317();
+    void slotOpenFile321();
+
+    void slotCheckBox41();
+
+    void slotOpenFile51();
+
+    void slotCheckBox81();
+    void slotOpenFile82();
+    void slotOpenFile83();
+    void slotOpenFile84();
+    void slotOpenFile85();
+    void slotOpenFile86();
+    void slotOpenFile87();
+    void slotOpenFile88();
+    void slotOpenFile89();
+    void slotOpenFile810();
+    void slotOpenFile811();
+    void slotOpenFile812();
+    void slotOpenFile813();
 
     void slotCheckBox64();
     void slotSetValueEdit67();

@@ -1,8 +1,7 @@
 #ifndef PARMDEFINE_H
 #define PARMDEFINE_H
 
-#define OBJECTPARAMETERFILE "pathtempname.txt"
-#define INPUTDEFAULTFILE "input_default.dat"
-
+#define SIMULATIONCONFIG "simulationConfig.txt"
+#define MAX_STRING 255
 
 #endif // PARMDEFINE_H!@

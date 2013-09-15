@@ -14,17 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         dialog.cpp \
-    psfdialog.cpp \
     detectordialog.cpp \
-    stinyconfigfile.cpp \
-    skyconfigfile.cpp \
     inputdefaultfile.cpp
 
 HEADERS  += dialog.h \
-    psfdialog.h \
     detectordialog.h \
-    stinyconfigfile.h \
-    skyconfigfile.h \
     inputdefaultfile.h \
     parmdefine.h
 

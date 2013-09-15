@@ -14,6 +14,8 @@ private:
 public:
     InputDefaultFile();
     bool readFile();
+    void setFileName(QString defaultFileName);
+    QString getValue(QString name);
     void replaceValue(QString name, QString value);
     bool writeFile();
 };

@@ -1,6 +1,7 @@
 
-#include "parmdefine.h"
+#include <QStringList>
 #include "inputdefaultfile.h"
+
 
 #define PARMNAMEAPPEND1 19
 #define PARMNAMEAPPEND2 37
@@ -15,8 +16,12 @@
 
 InputDefaultFile::InputDefaultFile()
 {
-    fileName = INPUTDEFAULTFILE;
     lines = QList<QString>();
+}
+
+void InputDefaultFile::setFileName(QString defaultFileName)
+{
+    fileName = defaultFileName;
 }
 
 bool InputDefaultFile::readFile()
@@ -49,7 +54,7 @@ void InputDefaultFile::replaceValue(QString name, QString value)
             QByteArray baValue = value.toLatin1();
             const char *chrValue = baValue.data();
             QString tmp;
-            tmp.sprintf("%-19s%-37s", chrName, chrValue);
+            tmp.sprintf("%-19s%-40s", chrName, chrValue);
             int idx = line.indexOf('#');
             if(idx>0)
                 tmp.append(line.mid(idx));
@@ -61,9 +66,38 @@ void InputDefaultFile::replaceValue(QString name, QString value)
     }
 }
 
+QString InputDefaultFile::getValue(QString name)
+{
+    QString rstStr = NULL;
+    for (int i = 0; i < lines.size(); ++i) {
+        QString line = lines.at(i);
+        if (line!=NULL && line.at(0)!='#' && line.at(0)!=' ' && line.contains(name))
+        {
+            QString tmp;
+            int idx = line.indexOf('#');
+            if(idx>0){
+                tmp = line.left(idx+1);
+            }else{
+                tmp = line;
+            }
+
+            QStringList tslist = tmp.split(" ");
+            for(int j=0; j<tslist.size(); j++){
+                QString subStr = tslist.at(j);
+                if(subStr!=NULL && subStr!="" && subStr!=name && subStr!="\n"){
+                    rstStr = subStr;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return rstStr;
+}
+
 bool InputDefaultFile::writeFile()
 {
-    QFile qfile(fileName.append("_bck"));
+    QFile qfile(fileName);
     if (!qfile.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
 
