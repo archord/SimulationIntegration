@@ -143,6 +143,8 @@ private:
     QLineEdit *lineEdit01;
     QPushButton *button01;
     QLabel *label02;
+    QLineEdit *lineEdit02;
+    QCheckBox *checkBox03;
 
     //观测策略
     QLabel *label11;
@@ -390,6 +392,7 @@ private:
     QList<QString> fileNameList;
 
 private slots:
+    void slotPyCall();
     void slotOpenFile01();
     void slotOpenFile26();
     void slotOpenFile27();

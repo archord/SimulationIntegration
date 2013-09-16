@@ -27,7 +27,7 @@ Dialog::Dialog()
     createGridGroupBox6();
     createGridGroupBox8();
     createGridGroupBox9();
-    createGridGroupBox7();
+    //createGridGroupBox7();
     createButtonBox();
 
 
@@ -121,6 +121,69 @@ void Dialog::slotGenerateConfigAction(){
 
 void Dialog::slotExecuteAction(){
 
+    runDirectory = defaultWorkspace;
+
+    /*
+    char extStr[MAX_STRING];
+    char message[MAX_STRING];
+    memset(extStr, 0, MAX_STRING);
+    strcat(extStr, "cd ");
+    strcat(extStr, runDirectory.toLatin1().data());
+    strcat(extStr, " && runsimulator.py -c ");
+    strcat(extStr, lineEdit02->text().toLatin1().data());
+    strcat(extStr, "_default.dat");
+
+    if(checkBox03->isChecked()){
+        strcat(extStr, " --getwise");
+    }
+
+    FILE *fpRead = popen(extStr, "r");
+    if(fpRead == NULL){
+        QMessageBox::warning(this, tr("跳转到工作目录"), tr("跳转到工作目录失败!"));
+    }else{
+        //if(fgets(message, MAX_STRING, fpRead) != NULL){
+            //QMessageBox::warning(this, tr("跳转到工作目录"), message);
+        //}
+        pclose(fpRead);
+    }*/
+
+    QString cmdStr = "runsimulator.py";
+    QStringList arguments;
+    arguments.append("-c");
+    arguments.append(lineEdit02->text()+"_default.dat");
+
+    if(checkBox03->isChecked()){
+        arguments.append("--getwise");
+    }
+    QProcess *pyCall = new QProcess(this);
+    pyCall->setWorkingDirectory(runDirectory);
+    pyCall->start(cmdStr, arguments);
+    executeButton->setEnabled(false);
+    generateConfig->setEnabled(false);
+    connect(pyCall, SIGNAL(finished(int , QProcess::ExitStatus)), this, SLOT(slotPyCall()));
+
+    QMessageBox::warning(this, tr("提示"), tr("程序正在后台运行，请稍等！"));
+
+//    QMessageBox::warning(this, tr("跳转到工作目录"), tr("start!"));
+//    QObject *parent;
+//    QString cmdStr = "mkdir";
+//    QStringList arguments;
+//    arguments.append("-v");
+//    arguments.append("abc");
+//    arguments.append("cba");
+
+
+//    QProcess *pyCall = new QProcess(this);
+//    pyCall->setWorkingDirectory(runDirectory);
+//    pyCall->start(cmdStr, arguments);
+//    QMessageBox::warning(this, tr("跳转到工作目录"), tr("end!"));
+}
+
+void Dialog::slotPyCall(){
+
+    executeButton->setEnabled(true);
+    generateConfig->setEnabled(true);
+    QMessageBox::warning(this, tr("提示"), tr("程序执行完成！"));
 }
 
 void Dialog::showDefaultParameter(){
@@ -133,7 +196,8 @@ void Dialog::createWorkDirectory()
     QDateTime curTime = QDateTime::currentDateTime();
     QString timeStr = curTime.toString("yyyyMMddhhmmss");
 
-    runDirectory = defaultWorkspace + "/" + timeStr;
+    //runDirectory = defaultWorkspace + "/" + timeStr;
+    runDirectory = defaultWorkspace;
     configDirectory = runDirectory + "/config";
 
     bool dirExist = tmpDir->exists(runDirectory);
@@ -145,7 +209,7 @@ void Dialog::createWorkDirectory()
         }
     }
 
-    tmpDir->exists(configDirectory);
+    dirExist = tmpDir->exists(configDirectory);
     if(!dirExist){
         char extStr[MAX_STRING];
         memset(extStr, 0, MAX_STRING);
@@ -168,6 +232,9 @@ void Dialog::readInputDefaultFile(){
     inputfile = new InputDefaultFile();
     inputfile->setFileName(inputDefaultFilePath);
     inputfile->readFile();
+
+
+    lineEdit02->setText(inputfile->getValue("outfilprefix"));
 
     //观测策略
     lineEdit01->setText(defaultWorkspace);
@@ -352,6 +419,8 @@ void Dialog::readInputDefaultFile(){
 
 void Dialog::saveInputDefaultFile(){
 
+    inputfile->replaceValue("outfilprefix", lineEdit02->text());
+
     //观测策略
     inputfile->replaceValue("ra",lineEdit11->text());
     inputfile->replaceValue("dec",lineEdit12->text());
@@ -510,7 +579,7 @@ void Dialog::saveInputDefaultFile(){
     tStr.append(lineEdit98->text());
     inputfile->replaceValue("detect_snr",tStr);
 
-    QString inputDefaultFilePath = runDirectory+"/"+inputDefaultFile;
+    QString inputDefaultFilePath = runDirectory+"/" + lineEdit02->text() + "_default.dat";
     inputfile->setFileName(inputDefaultFilePath);
 
     if(!inputfile->writeFile()){
@@ -550,18 +619,26 @@ void Dialog::createWorkSpaceBox(){
     button01 = new QPushButton;
     button01->setIcon(QIcon(":/images/open.png"));
     connect(button01, SIGNAL(clicked()), this, SLOT(slotOpenFile01()));
-    tmpString = codec->toUnicode("");
+    tmpString = codec->toUnicode("输出文件前缀:");
     label02 = new QLabel(tmpString);
+    lineEdit02 = new QLineEdit;
+    lineEdit02->setMaximumWidth(InputBoxMaxLength);
+    tmpString = codec->toUnicode("下载星表");
+    checkBox03 = new QCheckBox(tmpString);
+    checkBox03->setLayoutDirection(Qt::RightToLeft);
+    checkBox03->setChecked(true);
 
     layout->addWidget(label01, 0, 0);
     layout->addWidget(lineEdit01, 0, 1);
     layout->addWidget(button01, 0, 2);
     layout->addWidget(label02, 0, 3);
+    layout->addWidget(lineEdit02, 0, 4);
+    layout->addWidget(checkBox03, 0, 5);
 
-    layout->setColumnStretch(0, 1);
-    layout->setColumnStretch(1, 2);
-    layout->setColumnStretch(2, 0.5);
-    layout->setColumnStretch(3, 3);
+//    layout->setColumnStretch(0, 1);
+//    layout->setColumnStretch(1, 2);
+//    layout->setColumnStretch(2, 0.5);
+//    layout->setColumnStretch(3, 3);
 
     groupBox0->setLayout(layout);
     //groupBox0->setMaximumHeight(40);
@@ -1550,8 +1627,10 @@ void Dialog::slotOpenFile01()
                                                 defaultWorkspace,
                                                 QFileDialog::ShowDirsOnly
                                                 | QFileDialog::DontResolveSymlinks);
-    if(dir!=NULL&&dir!="")
+    if(dir!=NULL&&dir!=""){
         lineEdit01->setText(dir);
+        defaultWorkspace = dir;
+    }
     //QString fileName = QFileDialog::getOpenFileName(this);
     //lineEdit01->setText(fileName);
 }
@@ -1610,13 +1689,13 @@ void Dialog::slotCheckBox41()
 {
     if(checkBox41->isChecked())
     {
-        lineEdit42->setReadOnly(true);
-        lineEdit43->setReadOnly(true);
-        lineEdit44->setReadOnly(true);
-    }else{
         lineEdit42->setReadOnly(false);
         lineEdit43->setReadOnly(false);
         lineEdit44->setReadOnly(false);
+    }else{
+        lineEdit42->setReadOnly(true);
+        lineEdit43->setReadOnly(true);
+        lineEdit44->setReadOnly(true);
     }
 }
 
@@ -1870,9 +1949,15 @@ void Dialog::slotSetValueEdit67()
 
 bool Dialog::loadObjectParameterFileNames()
 {
-    QFile qfile(ObjectParameterFile);
-    if (!qfile.open(QIODevice::ReadOnly | QIODevice::Text))
+    QString tStr = simulationConfigDir;
+    tStr.append("/pahtemp/");
+    tStr.append(ObjectParameterFile);
+
+    QFile qfile(tStr);
+    if (!qfile.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QMessageBox::warning(this, tr("提示"), tr("加载参数配置文件失败！"));
         return false;
+    }
 
     QTextStream in(&qfile);
     QString line = in.readLine();
