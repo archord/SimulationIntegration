@@ -1183,7 +1183,7 @@ void Dialog::createGridGroupBox5()
 void Dialog::createGridGroupBox6()
 {
 
-    tmpString = codec->toUnicode("展源目标天体分布模型");
+    tmpString = codec->toUnicode("展源目标天体");
 
     QWidget *page = new QWidget;
     QGridLayout *layout = new QGridLayout(page);
@@ -1550,7 +1550,7 @@ void Dialog::createGridGroupBox8()
 //detection efficiency parameter
 void Dialog::createGridGroupBox9()
 {
-    tmpString = codec->toUnicode("探测效率参数");
+    tmpString = codec->toUnicode("探测能力计算");
 
     QWidget *page = new QWidget;
     QGridLayout *layout = new QGridLayout(page);
