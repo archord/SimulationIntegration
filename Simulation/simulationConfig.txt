@@ -1,0 +1,6 @@
+DEFAULTWORKSPACE=/home/nice/work/output
+SIMULATIONCONFIG=/home/nice/NSimulator/workcodes/config
+OBJECTPARAMETERFILE=pathtempname.txt
+INPUTDEFAULTFILE=input_default.dat
+
+
